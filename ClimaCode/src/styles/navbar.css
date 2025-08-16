@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.logo > img {
+    width: 58px;
+    height: 58px;
+}
+.logo {
+    align-items: center;
+    display: flex;
+}
+header {
+    width: max-content;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    margin-top: 40px;
+    margin-left: 65px;
+
+}
+.navbar > a {
+    justify-content: space-between;
+}
+.logo {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 100%;
+    margin-right: 230px;
+}
+a {
+    color: #000;
+    text-decoration: none;
+}
+.nav-btn {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 100%;
+    margin-right: 35px;
+    margin-left: 35px;
+}
+.nav-login {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 100%;
+    color: #fff;
+    background-color: #4CAF50;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 50px;
+    margin-right: 135px;
+}
+.footer-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: 150px;
+}
+.footer-nav > h1 {
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 100%;
+
+}
+.footer-nav > ul > li {
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 100%;
+}
+.footer-nav { 
+    display: inline;
+    text-align: left;
+    width: 380px;
+}
+.footer-contacts > h1 {
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 100%;
+}
+.footer-contacts > ul > li > img {
+    width: 55px;
+}
+.footer-contacts > ul > li {
+    display: flex;
+}
+.footer-contacts > ul > li > p {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 100%;
+}
+.social-icons {
+    align-items: center;
+    text-align: center;
+    margin-top: 100px;
+    margin-left: 150px;
+}
+.social-icons > a > img{
+    width: 105px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+.socials-section > p {
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 100%;
+    text-align: center;
+    margin-left: 150px;
+}

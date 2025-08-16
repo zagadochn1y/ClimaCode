@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+header, main, footer {
+  width: 100%;
+}
+* {
+  font-family: "Inter", sans-serif;
+  color: #000;
+}
+html, body {
+  overflow-x: hidden;
+  height: auto;
+  margin-bottom: 100px;
+}
+.home-content {
+  max-width: 800px;
+  margin-left: 77px;
+
+}
+.home-content >h1 {
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 100%;
+  color: #000;
+}
+.home-content > p {
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 100%;
+  color:#000;
+  margin-top: -50px;
+}
+.home-content > a > button {
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 100%;
+  color: #fff;
+  background-color: #3A923E;
+  padding: 20px 40px 20px 40px;
+  border-radius: 20px;
+  box-shadow: 5px 6px 9.5px rgba(0, 0, 0, 25%);
+}
+.main-section {
+  display: flex;
+
+}
+.home-image {
+  margin-left: 65px;
+  max-width: 53rem;
+}
+.why-us-section {
+  display: block;
+}
+.why-us-title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 100%;
+  margin-left: 150px;
+}
+.why-us-cards {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: 70px;
+  margin-left: 150px;
+  margin-right: auto;
+}
+.line {
+  margin-top: 200px;
+  margin-left: 500px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  border: #3A923E 4px solid;
+  border-radius: 5px;
+}
+.about-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 100%;
+    margin-top: 160px;
+    margin-left: 150px;
+}
+.about-description {
+    margin-left: 150px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 100%;;
+    width: 1600px;
+}
+.about-cards {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-left: 150px;
+}
