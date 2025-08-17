@@ -84,6 +84,7 @@ a {
     line-height: 100%;
 }
 .footer-contacts > ul > li > img {
+    margin-right: 20px;
     width: 55px;
 }
 .footer-contacts > ul > li {
