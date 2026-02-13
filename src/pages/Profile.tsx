@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { User, Mail, Calendar, Globe2, Leaf, LogOut, Trophy } from "lucide-react";
+import { Mail, Calendar, Globe2, LogOut, Trophy } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -10,6 +9,7 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface ScanRecord {
   id: string;
@@ -24,27 +24,25 @@ interface ScanRecord {
 const Profile = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  const [scans, setScans] = useState<ScanRecord[]>([]);
-  const [scansLoading, setScansLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (!loading && !user) navigate("/login");
-  }, [user, loading, navigate]);
+  // 1️⃣ Перехват, если нет user
+  if (!loading && !user) navigate("/login");
 
-  useEffect(() => {
-    if (!user) return;
-    const fetchScans = async () => {
-      setScansLoading(true);
+  // 2️⃣ Запрос сканов через React Query
+  const { data: scans = [], isLoading: scansLoading } = useQuery(
+    ["scans", user?.id],
+    async () => {
+      if (!user) return [];
       const { data } = await supabase
         .from("scan_results")
         .select("id, url, country, co2_per_view, co2_per_year, sustainability_score, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
-      setScans(data ?? []);
-      setScansLoading(false);
-    };
-    fetchScans();
-  }, [user]);
+      return data ?? [];
+    },
+    { enabled: !!user }
+  );
 
   if (loading || !user) {
     return (
@@ -54,10 +52,12 @@ const Profile = () => {
     );
   }
 
+  // 3️⃣ Статистика
   const totalCo2 = scans.reduce((acc, s) => acc + (s.co2_per_view ?? 0), 0);
-  const avgScore = scans.length > 0
-    ? (scans.reduce((acc, s) => acc + (s.sustainability_score ?? 0), 0) / scans.length).toFixed(2)
-    : "—";
+  const avgScore =
+    scans.length > 0
+      ? (scans.reduce((acc, s) => acc + (s.sustainability_score ?? 0), 0) / scans.length).toFixed(2)
+      : "—";
 
   const scoreColor = (score: number | null) => {
     if (!score) return "text-muted-foreground";
@@ -66,7 +66,7 @@ const Profile = () => {
     return "text-clima-danger";
   };
 
-  // Achievements based on real data
+  // 4️⃣ Достижения
   const profileAchievements = [
     { title: "First Scan", icon: "🔍", description: "Complete your first scan", earned: scans.length >= 1 },
     { title: "Carbon Tracker", icon: "🌱", description: "Complete 5 scans", earned: scans.length >= 5 },
@@ -82,27 +82,33 @@ const Profile = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           {/* Profile header */}
           <Card className="border-2 mb-8">
-            <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row items-center gap-6">
-                <Avatar className="h-20 w-20">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
-                    {user.email?.[0]?.toUpperCase() ?? "U"}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 text-center sm:text-left">
-                  <h1 className="text-2xl font-black mb-1">My Profile</h1>
-                  <div className="flex flex-col sm:flex-row gap-3 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" />{user.email}</span>
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3.5 w-3.5" />
-                      Joined {new Date(user.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short" })}
-                    </span>
-                  </div>
+            <CardContent className="p-6 flex flex-col sm:flex-row items-center gap-6">
+              <Avatar className="h-20 w-20">
+                <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
+                  {user.email?.[0]?.toUpperCase() ?? "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 text-center sm:text-left">
+                <h1 className="text-2xl font-black mb-1">My Profile</h1>
+                <div className="flex flex-col sm:flex-row gap-3 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" />{user.email}</span>
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-3.5 w-3.5" />
+                    Joined {new Date(user.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short" })}
+                  </span>
                 </div>
-                <Button variant="outline" className="rounded-full" onClick={async () => { await signOut(); navigate("/"); }}>
-                  <LogOut className="h-4 w-4 mr-2" /> Sign Out
-                </Button>
               </div>
+              <Button
+                variant="outline"
+                className="rounded-full"
+                onClick={async () => {
+                  await signOut();
+                  navigate("/");
+                  queryClient.clear(); // очистка кэша после выхода
+                }}
+              >
+                <LogOut className="h-4 w-4 mr-2" /> Sign Out
+              </Button>
             </CardContent>
           </Card>
 
@@ -167,27 +173,25 @@ const Profile = () => {
               {scans.map((scan, i) => (
                 <motion.div key={scan.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
                   <Card className="border hover:border-primary/40 transition-colors">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center flex-shrink-0">
-                          <Globe2 className="h-5 w-5 text-primary" />
+                    <CardContent className="p-4 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center flex-shrink-0">
+                        <Globe2 className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm truncate">{scan.url}</p>
+                        <div className="flex gap-3 text-xs text-muted-foreground mt-0.5">
+                          <span>{scan.country}</span>
+                          <span>{new Date(scan.created_at).toLocaleDateString()}</span>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-sm truncate">{scan.url}</p>
-                          <div className="flex gap-3 text-xs text-muted-foreground mt-0.5">
-                            <span>{scan.country}</span>
-                            <span>{new Date(scan.created_at).toLocaleDateString()}</span>
-                          </div>
+                      </div>
+                      <div className="flex items-center gap-4 flex-shrink-0">
+                        <div className="text-right hidden sm:block">
+                          <p className="text-sm font-bold">{scan.co2_per_view ?? "—"}g</p>
+                          <p className="text-[10px] text-muted-foreground">per view</p>
                         </div>
-                        <div className="flex items-center gap-4 flex-shrink-0">
-                          <div className="text-right hidden sm:block">
-                            <p className="text-sm font-bold">{scan.co2_per_view ?? "—"}g</p>
-                            <p className="text-[10px] text-muted-foreground">per view</p>
-                          </div>
-                          <Badge variant="outline" className={`font-bold ${scoreColor(scan.sustainability_score)}`}>
-                            {scan.sustainability_score ?? "—"}
-                          </Badge>
-                        </div>
+                        <Badge variant="outline" className={`font-bold ${scoreColor(scan.sustainability_score)}`}>
+                          {scan.sustainability_score ?? "—"}
+                        </Badge>
                       </div>
                     </CardContent>
                   </Card>
