@@ -66,6 +66,8 @@ const ClimaScan = () => {
 
       const data = await resp.json();
       setResult(data);
+      console.log("User object:", user);
+      console.log("User ID:", user?.id);
 
       if (user) {
         await supabase.from("scan_results").insert({
