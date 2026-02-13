@@ -65,4 +65,15 @@ Build ClimaCode from the source and install dependencies:
 1. **Clone the repository:**
 ```bash
 git clone https://github.com/zagadochn1y/ClimaCode
+```
+
+2. **Navigate to the project directory**
+```bash
+cd ClimaCode
+```
+
+3. **Install dependencies**
+```bash
+npm install
+```
 
