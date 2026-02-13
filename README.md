@@ -27,6 +27,7 @@
 ---
 
 <h3 align="center" style="font-size: 2em;">Table of Contents</h3>
+
 - [Overview](#overview)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -76,4 +77,5 @@ cd ClimaCode
 ```bash
 npm install
 ```
+
 
