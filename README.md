@@ -1,11 +1,12 @@
-# CLIMACODE
-*Empowering Sustainable Innovation Through Digital Impact*
+<h1 align="center" style="font-size: 3em;">CLIMACODE</h1>
+
+<h3 align="center" style="font-size: 2em;">Empowering Sustainable Innovation Through Digital Impact</h3>
 
 ![Last Commit](https://img.shields.io/github/last-commit/zagadochn1y/ClimaCode?style=flat&logo=git&logoColor=white&color=0080ff)
 ![Top Language](https://img.shields.io/github/languages/top/zagadochn1y/ClimaCode?style=flat&color=0080ff)
 ![Language Count](https://img.shields.io/github/languages/count/zagadochn1y/ClimaCode?style=flat&color=0080ff)
 
-**Built with the tools and technologies:**
+<h3 align="center" style="font-size: 2em;">Built with the tools and technologies:</h3>
 
 ![JSON](https://img.shields.io/badge/JSON-000000.svg?style=flat&logo=JSON&logoColor=white)
 ![Markdown](https://img.shields.io/badge/Markdown-000000.svg?style=flat&logo=Markdown&logoColor=white)
@@ -25,7 +26,7 @@
 
 ---
 
-## Table of Contents
+<h3 align="center" style="font-size: 2em;">Table of Contents</h3>
 - [Overview](#overview)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -35,10 +36,10 @@
 
 ---
 
-## Overview
+<h3 align="center" style="font-size: 2em;">Overview</h3>
 ClimaCode is a comprehensive developer toolkit for building scalable, sustainable web applications with React, Vite, Tailwind CSS, and Supabase. It streamlines project setup, enforces UI consistency, and integrates environmental impact analysis features to promote eco-friendly digital practices.
 
-**Why ClimaCode?**
+<h3 align="center" style="font-size: 2em;">Why ClimaCode?</h3>
 
 This project aims to simplify the development of eco-conscious digital platforms. The core features include:
 
@@ -50,7 +51,7 @@ This project aims to simplify the development of eco-conscious digital platforms
 
 ---
 
-## Getting Started
+<h3 align="center" style="font-size: 2em;">Getting Started</h3>
 
 ### Prerequisites
 This project requires the following dependencies:
@@ -64,3 +65,4 @@ Build ClimaCode from the source and install dependencies:
 1. **Clone the repository:**
 ```bash
 git clone https://github.com/zagadochn1y/ClimaCode
+
