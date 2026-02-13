@@ -11,6 +11,10 @@ CREATE TABLE public.profiles (
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
+ALTER TABLE public.scan_results
+ADD CONSTRAINT unique_user_url UNIQUE (user_id, url);
+
+
 CREATE POLICY "Users can view their own profile"
   ON public.profiles FOR SELECT
   USING (auth.uid() = user_id);
