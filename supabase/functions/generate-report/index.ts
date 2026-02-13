@@ -69,7 +69,8 @@ h1{font-family:'Playfair Display',serif;color:#15803d;font-size:32px;margin-bott
     if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is not configured");
 
     const aiResp = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+
       {
         method: "POST",
         headers: {
