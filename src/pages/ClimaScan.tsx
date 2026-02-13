@@ -70,7 +70,7 @@ const ClimaScan = () => {
       console.log("User ID:", user?.id);
 
       if (user) {
-        await supabase.from("scan_results").upsert([{
+        await supabase.from("scan_results").insert({
           user_id: user.id,
           url,
           country,
@@ -79,8 +79,7 @@ const ClimaScan = () => {
           sustainability_score: data.sustainabilityScore,
           breakdown: data.breakdown,
           recommendations: data.recommendations,
-        }],
-        { onConflict: ["user_id", "url"], });
+        });
       }
     } catch (e: any) {
       toast({ title: "Scan error", description: e.message, variant: "destructive" });
