@@ -64,43 +64,58 @@ h1{font-family:'Playfair Display',serif;color:#15803d;font-size:32px;margin-bott
       });
     }
 
-    // Report Generation via Lovable AI Gateway
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    // Gemini API
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is not configured");
 
-    const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: "You are a sustainability expert. Generate a detailed analysis for a website carbon audit report. Include: Overview, Key Findings, Detailed Recommendations, and Next Steps. Keep it professional and under 500 words. Return plain text, no markdown." },
-          { role: "user", content: `Website: ${url}\nCO2 per view: ${co2PerView}g\nCO2 per year: ${co2PerYear}kg\nSustainability Score: ${sustainabilityScore}\nBreakdown: Images ${breakdown?.images}%, CSS ${breakdown?.css}%, JavaScript ${breakdown?.javascript}%, Other ${breakdown?.other}%\nRecommendations: ${recommendations?.join("; ")}` }
-        ],
-      }),
-    });
+    const aiResp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: `You are a sustainability expert. Generate a detailed carbon audit report for:
+
+    Website: ${url}
+    CO2 per view: ${co2PerView}g
+    CO2 per year: ${co2PerYear}kg
+    Sustainability Score: ${sustainabilityScore}
+    Breakdown: Images ${breakdown?.images}%, CSS ${breakdown?.css}%, JS ${breakdown?.javascript}%, Other ${breakdown?.other}%
+    Recommendations: ${recommendations?.join("; ")}
+
+    Include:
+    - Overview
+    - Key Findings
+    - Detailed Recommendations
+    - Next Steps
+
+    Keep it professional and under 500 words.
+    Return plain text only.`
+                }
+              ]
+            }
+          ]
+        }),
+      }
+    );
 
     if (!aiResp.ok) {
       const errText = await aiResp.text();
-      console.error("Lovable AI error:", aiResp.status, errText);
-      if (aiResp.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (aiResp.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      throw new Error("AI gateway error");
+      console.error("Gemini error:", errText);
+      throw new Error("Gemini API error");
     }
 
     const aiData = await aiResp.json();
-    const analysisContent = aiData.choices?.[0]?.message?.content ?? "Analysis unavailable.";
+
+    const analysisContent =
+      aiData.candidates?.[0]?.content?.parts?.[0]?.text ??
+      "Analysis unavailable.";
 
     const reportDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
     const reportHtml = `<!DOCTYPE html>
