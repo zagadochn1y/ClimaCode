@@ -20,7 +20,8 @@ export function useEcoDevProgress() {
       setLoading(true);
       const { data } = await supabase
         .from("ecodev_progress")
-        .select("module_id, completed_lessons, quiz_scores, completed");
+        .select("module_id, completed_lessons, quiz_scores, completed")
+        .eq("user_id", user.id);
       const map = new Map<number, ModuleProgress>();
       (data ?? []).forEach((row: any) => {
         map.set(row.module_id, {
