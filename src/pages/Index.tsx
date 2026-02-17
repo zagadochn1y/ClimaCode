@@ -6,6 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GlobeComponent from "@/components/Globe";
+import member1 from "@/images/member_1.jpg";
+import member2 from "@/images/member_2.jpg";
+
 
 const features = [
   {
@@ -39,8 +42,8 @@ const stats = [
 ];
 
 const team = [
-  { name: "Maidankhan Adilet", role: "Founder", photo: "@/images/member1.jpg" },
-  { name: "Maidan Adiya", role: "Founder", photo: "@/images/member2.jpg" },
+  { name: "Maidankhan Adilet", role: "Founder", photo: member1 },
+  { name: "Maidan Adiya", role: "Founder", photo: member2 },
 ];
 
 const Index = () => {
