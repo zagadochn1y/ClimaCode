@@ -127,7 +127,7 @@ h1{font-family:'Playfair Display',serif;color:#15803d;font-size:32px;margin-bott
             ],
             generationConfig: {
               temperature: 0.3,
-              maxOutputTokens: 500,
+              maxOutputTokens: 300,
             },
           }),
         }
