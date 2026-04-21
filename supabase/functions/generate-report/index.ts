@@ -112,13 +112,6 @@ h1{font-family:'Playfair Display',serif;color:#15803d;font-size:32px;margin-bott
                     text: `You are a sustainability expert.
 
     Write a clean professional carbon audit report.
-
-    STRICT RULES:
-    - NO markdown
-    - NO symbols like *, #, -, bullets
-    - ONLY plain text
-    - Use simple paragraphs with line breaks
-
     Structure:
     Overview
     Key Findings
