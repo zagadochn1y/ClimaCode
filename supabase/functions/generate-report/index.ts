@@ -76,14 +76,27 @@ h1{font-family:'Playfair Display',serif;color:#15803d;font-size:32px;margin-bott
         .trim();
     }
 
-    
+    async function fetchWithRetry(url: string, options: any, maxRetries = 3) {
+      for (let i = 0; i < maxRetries; i++) {
+        const response = await fetch(url, options);
+        
+        if (response.status === 429) {
+          const waitTime = Math.pow(2, i) * 1000 + Math.random() * 1000; // Экспоненциальная задержка
+          console.log(`Rate limited. Waiting ${waitTime}ms...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+          continue;
+        }
+        return response;
+      }
+      return fetch(url, options); // Последняя попытка без обработки
+    }
     const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
     if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is not configured");
 
     let analysisContent = "Analysis unavailable.";
 
     try {
-      const aiResp = await fetch(
+      const aiResp = await fetchWithRetry(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: "POST",
@@ -128,6 +141,7 @@ h1{font-family:'Playfair Display',serif;color:#15803d;font-size:32px;margin-bott
             generationConfig: {
               temperature: 0.3,
               maxOutputTokens: 300,
+              response_mime_type: "text/plain",
             },
           }),
         }
